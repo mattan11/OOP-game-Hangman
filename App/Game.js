@@ -44,7 +44,8 @@ class Game {
   }
 
   guess(letter) {
-    this.sentence.guess(letter);
+    this.quote.guess(letter);
+    this.drawQuote();
   }
 
   drawLetters() {
@@ -95,11 +96,14 @@ class Game {
     }
   }
 
-  start() {
-    this.drawLetters();
-
+  drawQuote() {
     const content = this.quote.getContent();
     this.wordWrapper.innerText = content;
+  }
+
+  start() {
+    this.drawLetters();
+    this.drawQuote();
   }
 }
 

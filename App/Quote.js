@@ -1,17 +1,26 @@
 export class Quote {
   constructor(text) {
     // przpisanie jako właściwość
-    this.text = text;
+    this.text = text.toLowerCase();
+    this.guessed = [];
   }
   getContent() {
     let content = "";
     for (const char of this.text) {
-      if (char !== " ") {
-        content += "_";
+      if (char === " " || this.guessed.includes(char)) {
+        content += char;
       } else {
-        content += " ";
+        content += "_";
       }
     }
     return content;
+  }
+
+  guess(letter) {
+    if (!this.text.includes(letter.toLowerCase())) {
+      return false;
+    }
+    this.guessed.push(letter.toLowerCase());
+    return true;
   }
 }
