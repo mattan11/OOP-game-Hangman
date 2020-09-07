@@ -1,3 +1,5 @@
+import { Quote } from "./Quote.js";
+
 class Game {
   quotes = [
     {
@@ -31,16 +33,20 @@ class Game {
     this.categoryWrapper = categoryWrapper;
     this.lettersWrapper = lettersWrapper;
 
+    // losowanie hasła i kategorii
     const { text, category } = this.quotes[
       Math.floor(Math.random() * this.quotes.length)
     ];
-    this.categoryWrapper.innerHTML = category;
-    this.wordWrapper.innerHTML = text;
+    // wyświetlenie kategori
+    this.categoryWrapper.innerText = category;
+    // wyświetlenia
+    this.quote = new Quote(text);
   }
 
   guess(letter) {
-    console.log(letter);
+    this.sentence.guess(letter);
   }
+
   drawLetters() {
     const letters = [
       "A",
@@ -83,7 +89,7 @@ class Game {
     for (let i = 0; i < letters.length; i++) {
       const label = letters[i];
       const button = document.createElement("button");
-      button.innerHTML = label;
+      button.innerText = label;
       button.addEventListener("click", () => this.guess(label));
       this.lettersWrapper.appendChild(button);
     }
@@ -91,5 +97,17 @@ class Game {
 
   start() {
     this.drawLetters();
+
+    const content = this.quote.getContent();
+    this.wordWrapper.innerText = content;
   }
 }
+
+const game = new Game({
+  // przekazanie zmiennych inicjalizujących do Game.js przez konstruktor muszą być odebrane w konstruktorze
+  outputWrapper: document.getElementById("output"),
+  wordWrapper: document.getElementById("word"),
+  categoryWrapper: document.getElementById("category"),
+  lettersWrapper: document.getElementById("letters"),
+});
+game.start();
