@@ -1,6 +1,9 @@
 import { Quote } from "./Quote.js";
 
 class Game {
+  currentStep = 0;
+  lastStep = 8;
+
   quotes = [
     {
       text: "Pan Tadeusz",
@@ -43,9 +46,20 @@ class Game {
     this.quote = new Quote(text);
   }
 
-  guess(letter) {
+  guess(letter, event) {
+    event.target.disabled = true;
+
     this.quote.guess(letter);
-    this.drawQuote();
+    if (this.quote.guess(letter)) {
+      event.target.className = "positive";
+      this.drawQuote(event);
+    } else {
+      event.target.className = "negative";
+      this.currentStep++;
+      document.getElementsByClassName("step")[
+        this.currentStep
+      ].style.opacity = 1;
+    }
   }
 
   drawLetters() {
@@ -91,17 +105,19 @@ class Game {
       const label = letters[i];
       const button = document.createElement("button");
       button.innerText = label;
-      button.addEventListener("click", () => this.guess(label));
+      button.addEventListener("click", (event) => this.guess(label, event));
       this.lettersWrapper.appendChild(button);
     }
   }
 
-  drawQuote() {
+  drawQuote(event) {
     const content = this.quote.getContent();
     this.wordWrapper.innerText = content;
   }
 
   start() {
+    //zmiana opacity pierwszego obrazka
+    document.getElementsByClassName("step")[this.currentStep].style.opacity = 1;
     this.drawLetters();
     this.drawQuote();
   }

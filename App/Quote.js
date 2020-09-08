@@ -13,7 +13,7 @@ export class Quote {
         content += "_";
       }
     }
-    return content;
+    return content.toUpperCase();
   }
 
   guess(letter) {
