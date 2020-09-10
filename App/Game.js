@@ -27,6 +27,25 @@ class Game {
     },
   ];
 
+  getBookTitles() {
+    fetch("https://wolnelektury.pl/api/books/")
+      .then((response) => {
+        if (response.ok) {
+          return response;
+        }
+        throw Error("Fetching error");
+      })
+      .then((response) => response.json())
+      .then((data) => {
+        for (let i = 0; i < data.length; i++) {
+          this.quotes.push({ text: data[i].title, category: data[i].genre });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }
+
   //odebranie właściwości inicjalizujących
   constructor({ outputWrapper, wordWrapper, categoryWrapper, lettersWrapper }) {
     // te 4 odebrane argumenty staną się właściwościami klasy Game, aby można było się do nich odwoływać
@@ -42,7 +61,7 @@ class Game {
     ];
     // wyświetlenie kategori
     this.categoryWrapper.innerText = category;
-    // wyświetlenia
+    // wyświetlenie hasła
     this.quote = new Quote(text);
   }
 
@@ -124,6 +143,7 @@ class Game {
   start() {
     //zmiana opacity pierwszego obrazka
     document.getElementsByClassName("step")[this.currentStep].style.opacity = 1;
+    this.getBookTitles();
     this.drawLetters();
     this.drawQuote();
   }
